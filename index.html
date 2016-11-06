@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Movies</title>
+    <div id="container">
+<h1>My Favorite Movies are here</h1>
+	<div id="movie_title"></div>
+	<br />
+	<div id="movie_info"></div>
+</div>
+
+	<style>
+
+
+	</style>
+
+	
+<script>
+function getMovieTitles()
+{
+   var xmlhttp;
+   if(window.XMLHttpRequest)
+   {
+	xmlhttp=new XMLHttpRequest();
+   }
+   else
+   {
+	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+   }
+ 
+   xmlhttp.onreadystatechange=function()
+   {
+      if(xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+	jsondata=JSON.parse(xmlhttp.responseText);
+	var movies=jsondata.movies;
+	var output='<form>';
+	output+='<select id="movie_select" onchange="movieSelect()">';
+	
+	for(var i=0;i<movies.length;i++)
+	{
+	    output+='<option value="'+i+'">'+movies[i].title+'</option>';
+	}
+	output+='</select>';
+	output+='</form>';
+	document.getElementById('movie_title').innerHTML=output;
+      }
+   }
+   xmlhttp.open("GET","movies.json",true);
+   xmlhttp.send();
+}
+</script>
+   
+</head>
+<body>
+<div id="container">
+<h1>My Favorite Movies are here</h1>
+	<div id="movie_title"></div>
+	<br />
+	<div id="movie_info"></div>
+</div>
+</body onload="getMovieTitles()">
+</html>

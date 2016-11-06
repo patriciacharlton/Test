@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Movies</title>
+<div id="container">
+<h1>My Favorite Movies are here</h1>
+	<div id="movie_title"></div>
+	<br />
+	<div id="movie_info"></div>
+</div>
+
+
+<style>
+h1{text-align:center;}
+h4{margin:0;padding:5px;background:#f4f4f4;}
+li{list-style:none;padding-left:5px;}
+#container{width:600px;margin:80px auto;overflow:hidden;border:1px #666 dashed;padding:15px;min-height:200px;}
+</style>
+	
+
+<span id="ajaxButton" style="cursor: pointer; text-decoration: underline">
+  Make a request
+</span>
+<script type="text/javascript">
+
+(function() {
+  //var httpRequest
+ document.getElementById("ajaxButton").onclick = function() {getMovieTitles;};
+ 
+
+ function getMovieTitles(){
+   var xmlhttp;
+   if(window.XMLHttpRequest)
+   {
+	xmlhttp=new XMLHttpRequest();
+   }
+   else
+   {
+	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+   }
+ 
+   xmlhttp.onreadystatechange= movies;
+
+   
+   function movies(){
+      if(xmlhttp.status==200)
+      {
+	jsondata=JSON.parse(xmlhttp.responseText);
+	var movies=jsondata.movies;
+	var output='<form>';
+	output+='<select id="movie_select" onchange="movieSelect()">';
+	
+	for(var i=0;i<movies.length;i++)
+	{
+	    output+='<option value="'+i+'">'+movies[i].title+'</option>';
+	}
+	output+='</select>';
+	output+='</form>';
+	document.getElementById('movie_title').innerHTML=output;
+      }
+   }
+   xmlhttp.open("GET","movies.json",true);
+   xmlhttp.send();
+ }
+})();
+</script>
+   
+</head>
+<body>
+<div id="container">
+<h1>My Favorite Movies are here</h1>
+	<div id="movie_title"></div>
+	<br />
+	<div id="movie_info"></div>
+</div>
+</body>
+   
+</html>

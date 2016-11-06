@@ -1,0 +1,70 @@
+<body onload="getmovietitles()">
+  <div id="container"><h1>My Favorites's Movies</h1></div>  
+  <div id="movietitle"></div> 
+  <br />
+  <div id="movieinfo"></div>
+
+
+  <pre>
+    <script>
+    function getmovietitles() {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var jsondata = JSON.parse(xmlhttp.responseText);
+                var movies = jsondata.movies;
+                var output = '<form>';
+                output +='<select id="movie_select" onchange="movieSelect()">';
+
+                for (var i=0; i < movies.length;i++){
+                    output +='<option value="'+i+'">'+movies[i].title+'</option>';
+                }
+
+                output += '</select>';
+                output += '</form>';
+                document.getElementById("movietitle").innerHTML = output;
+            }
+        }
+
+        xmlhttp.open("GET","movies.json",true);
+        xmlhttp.send();
+    }
+
+
+    function movieSelect() {
+        var selectbox = document.getElementById("movie_select");
+        var movieindex = selectbox.options[selectbox.selectedIndex].value;
+
+        getmovieinfo(movieindex);
+    }   
+
+    function getmovieinfo(i) {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                var jsondata = JSON.parse(xmlhttp.responseText);
+                var movies = jsondata.movies;
+                var output='';
+                output +='<li>Year: '+movies[i].year+ '</li>';
+                output +='<li>Genre: '+movies[i].genre+ '</li>';
+                output +='<li>Directory: '+movies[i].directory+ '</li>';
+                document.getElementById('movieinfo').innerHTML = output;
+            }
+        }
+        xmlhttp.open("GET","movies.json",true);
+        xmlhttp.send();
+    }
+    </script>
+  </pre>  
